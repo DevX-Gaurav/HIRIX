@@ -15,11 +15,14 @@ const app = express();
 /* middleware to handle cors */
 app.use(
   cors({
-    origin: "*",
+    origin: process.env.FRONTEND_URL,
     methode: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
+app.get("/", (req, res) => {
+  res.status(200).send("hello new request.");
+});
 
 /* middleware */
 app.use(express.json());
