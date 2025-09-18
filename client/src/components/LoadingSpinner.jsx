@@ -1,0 +1,23 @@
+import { Briefcase } from "lucide-react";
+import React from "react";
+
+const LoadingSpinner = () => {
+  return (
+    <section className="min-h-[80vh]  flex items-center justify-center">
+      <div className="teext-center">
+        <div className="relative">
+          <div className="animate-spin rounded-full h-16 w-16 border-4 border-blue-200 border-t-blue-600 mx-auto mb-4"></div>
+          <div className="absolute inset-0 flex items-center justify-center">
+            <Briefcase className="w-6 h-6 text-blue-600" />
+          </div>
+        </div>
+
+        <p className="text-gray-600 font-semibold tracking-wider">
+          Finding amazing opportunities....
+        </p>
+      </div>
+    </section>
+  );
+};
+
+export default LoadingSpinner;
