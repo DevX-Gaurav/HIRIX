@@ -3,6 +3,7 @@ const express = require("express");
 const fs = require("fs");
 const path = require("path");
 const User = require("../models/userModel");
+const cloudinary = require("cloudinary").v2;
 
 const updateProfile = async (req, res) => {
   try {
