@@ -202,7 +202,7 @@ const UserProfile = () => {
                       Link:{""}
                       <a
                         href={formData?.resume}
-                        target="_blank"
+                        download
                         className="text-blue-500 underline cursor-pointer"
                       >
                         {formData?.resume}
