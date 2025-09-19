@@ -26,6 +26,7 @@ const SearchHeader = ({ filters, handleFilterChange }) => {
             <MapPin className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 z-[1] " />{/* */}
             <input
               type="text"
+              placeholder="Enter Job location"
               value={filters.location}
               onChange={(e) => handleFilterChange("location", e.target.value)}
               className="w-full pl-12 pr-4 py-2 lg:py-2.5 border border-gray-200 rounded-xl lg:rounded-xl outline-0 text-base bg-white/50 backdrop-blur-sm"
