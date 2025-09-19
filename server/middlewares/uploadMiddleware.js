@@ -2,24 +2,14 @@ const multer = require("multer");
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const cloudinary = require("cloudinary").v2;
 
-/* Configure cloudinary */
+/* Configure Cloudinary */
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-// /* Configure storage engine for multer */
-// const storage = new CloudinaryStorage({
-//   cloudinary: cloudinary,
-//   params: {
-//     folder: "Hirix" /* all images will be inside this folder on Cloudinary */,
-//     allowed_formats: ["jpeg", "jpg", "png", "pdf", "svg"],
-//     public_id: (req, file) =>
-//       `${Date.now()}-${file.originalname.split(".")[0]}` /* unique name */,
-//   },
-// });
-
+/* Storage engine */
 const storage = new CloudinaryStorage({
   cloudinary,
   params: async (req, file) => {
@@ -28,28 +18,33 @@ const storage = new CloudinaryStorage({
       return {
         folder: "Hirix/Resumes",
         resource_type: "raw",
-        public_id: `${Date.now()}-${file.originalname.split(".")[0]}.${extension}`,
+        public_id: `${Date.now()}-${
+          file.originalname.split(".")[0]
+        }.${extension}`,
       };
     } else {
       return {
         folder: "Hirix/Images",
+        resource_type: "image",
         allowed_formats: ["jpeg", "jpg", "png", "svg"],
-        public_id: `${Date.now()}-${file.originalname.split(".")[0]}.${extension}`,
+        public_id: `${Date.now()}-${
+          file.originalname.split(".")[0]
+        }.${extension}`,
       };
     }
   },
 });
 
-
-/* File filter (extra safety) */
+/* File filter */
 const fileFilter = (req, file, cb) => {
   const allowedTypes = [
     "image/jpeg",
     "image/png",
     "image/jpg",
     "application/pdf",
-    "image/svg+xml" /* added svg */,
+    "image/svg+xml",
   ];
+
   if (allowedTypes.includes(file.mimetype)) {
     cb(null, true);
   } else {
@@ -64,4 +59,19 @@ const fileFilter = (req, file, cb) => {
 
 const upload = multer({ storage, fileFilter });
 
-module.exports = upload;
+/* Helper: Generate signed URL for raw files (PDFs) or normal URL for images */
+const getCloudinaryFileUrl = (publicId, resourceType = "image") => {
+  if (resourceType === "raw") {
+    return cloudinary.url(publicId, {
+      resource_type: "raw",
+      type: "authenticated",
+      sign_url: true,
+    });
+  }
+  return cloudinary.url(publicId, { resource_type: "image" });
+};
+
+module.exports = {
+  upload,
+  getCloudinaryFileUrl, // export helper along with upload
+};
