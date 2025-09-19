@@ -37,9 +37,9 @@ router.post("/upload-image", upload.single("image"), async (req, res) => {
 
     // PDFs -> raw + signed URL, Images/SVG -> normal URL
     if (file.mimetype === "application/pdf") {
-      fileUrl = getCloudinaryFileUrl(file.path, "raw");
+      fileUrl = getCloudinaryFileUrl(file.filename, "raw");
     } else {
-      fileUrl = getCloudinaryFileUrl(file.path, "image");
+      fileUrl = getCloudinaryFileUrl(file.filename, "image");
     }
 
     console.log("Cloudinary upload success:", file);
@@ -49,25 +49,5 @@ router.post("/upload-image", upload.single("image"), async (req, res) => {
     res.status(500).json({ message: error.message || "Upload failed" });
   }
 });
-
-module.exports = router;
-
-// app.post("/upload-image", upload.single("image"), async (req, res) => {
-//   try {
-//     const file = req.file;
-
-//     let url;
-//     if (file.mimetype === "application/pdf") {
-//       url = getCloudinaryFileUrl(file.path, "raw");
-//     } else {
-//       url = upload.getCloudinaryFileUrl(file.path, "image");
-//     }
-
-//     res.json({ fileUrl: url });
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ error: "Upload failed" });
-//   }
-// });
 
 module.exports = router;
