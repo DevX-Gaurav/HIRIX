@@ -33,7 +33,8 @@ const register = async (req, res) => {
       resume: user.resume || "",
     });
   } catch (error) {
-    res.status(500).json({ message: error });
+    console.error("Error in register:", error); // log full error in server logs
+    res.status(500).json({ message: error.message || "Internal Server Error" });
   }
 };
 

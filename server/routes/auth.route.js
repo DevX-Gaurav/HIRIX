@@ -23,14 +23,16 @@ router.get("/get", protect, getMe);
 // });
 
 router.post("/upload-image", upload.single("image"), (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({
-      message: "No file uploaded",
-    });
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: "No file uploaded" });
+    }
+    console.log("Cloudinary upload success:", req.file);
+    res.status(200).json({ imageUrl: req.file.path });
+  } catch (error) {
+    console.error("Upload error:", error);
+    res.status(500).json({ message: error.message || "Upload failed" });
   }
-
-  // Cloudinary gives URL in req.file.path
-  res.status(200).json({ imageUrl: req.file.path });
 });
 
 module.exports = router;
