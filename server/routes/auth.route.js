@@ -26,6 +26,30 @@ router.get("/get", protect, getMe);
 //   }
 // });
 
+// router.post("/upload-image", upload.single("image"), async (req, res) => {
+//   try {
+//     if (!req.file) {
+//       return res.status(400).json({ message: "No file uploaded" });
+//     }
+
+//     const file = req.file;
+//     let fileUrl;
+
+//     // PDFs -> raw + signed URL, Images/SVG -> normal URL
+//     if (file.mimetype === "application/pdf") {
+//       fileUrl = getCloudinaryFileUrl(file.filename, "raw");
+//     } else {
+//       fileUrl = getCloudinaryFileUrl(file.filename, "image");
+//     }
+
+//     console.log("Cloudinary upload success:", file);
+//     res.status(200).json({ imageUrl: fileUrl }); // return accessible/downloadable URL
+//   } catch (error) {
+//     console.error("Upload error:", error);
+//     res.status(500).json({ message: error.message || "Upload failed" });
+//   }
+// });
+
 router.post("/upload-image", upload.single("image"), async (req, res) => {
   try {
     if (!req.file) {
@@ -35,15 +59,15 @@ router.post("/upload-image", upload.single("image"), async (req, res) => {
     const file = req.file;
     let fileUrl;
 
-    // PDFs -> raw + signed URL, Images/SVG -> normal URL
+    // Use file.filename (the Cloudinary public_id)
     if (file.mimetype === "application/pdf") {
-      fileUrl = getCloudinaryFileUrl(file.filename, "raw");
+      fileUrl = getCloudinaryFileUrl(file.filename, "raw"); // raw URL, downloadable
     } else {
-      fileUrl = getCloudinaryFileUrl(file.filename, "image");
+      fileUrl = getCloudinaryFileUrl(file.filename, "image"); // image URL
     }
 
     console.log("Cloudinary upload success:", file);
-    res.status(200).json({ imageUrl: fileUrl }); // return accessible/downloadable URL
+    res.status(200).json({ fileUrl }); // use `fileUrl` key, can be `resume` too
   } catch (error) {
     console.error("Upload error:", error);
     res.status(500).json({ message: error.message || "Upload failed" });
