@@ -192,7 +192,7 @@ const UserProfile = () => {
               </div>
 
               {/* userResume */}
-              {formData?.resume ? (
+              {user?.resume ? (
                 <div>
                   <label className="block mt-1 font-medium text-gray-700 mb-2">
                     Resume
@@ -201,11 +201,11 @@ const UserProfile = () => {
                     <p className="text-sm text-gray-600">
                       Link:{""}
                       <a
-                        href={formData?.resume}
+                        href={user?.resume}
                         target="_blank"
                         className="text-blue-500 underline cursor-pointer"
                       >
-                        {formData?.resume}
+                        {user?.resume}
                       </a>
                     </p>
                     <button className="cursor-pointer " onClick={DeleteResume}>
