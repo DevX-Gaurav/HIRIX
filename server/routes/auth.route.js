@@ -67,7 +67,7 @@ router.post("/upload-image", upload.single("image"), async (req, res) => {
     }
 
     console.log("Cloudinary upload success:", file);
-    res.status(200).json({ fileUrl }); // use `fileUrl` key, can be `resume` too
+    res.status(200).json({ imageUrl: fileUrl }); // use `fileUrl` key, can be `resume` too
   } catch (error) {
     console.error("Upload error:", error);
     res.status(500).json({ message: error.message || "Upload failed" });
