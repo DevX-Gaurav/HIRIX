@@ -23,21 +23,23 @@ cloudinary.config({
 const storage = new CloudinaryStorage({
   cloudinary,
   params: async (req, file) => {
+    const extension = file.originalname.split(".").pop();
     if (file.mimetype === "application/pdf") {
       return {
         folder: "Hirix/Resumes",
-        resource_type: "raw", // important for PDFs
-        public_id: `${Date.now()}-${file.originalname.split(".")[0]}`,
+        resource_type: "raw",
+        public_id: `${Date.now()}-${file.originalname.split(".")[0]}.${extension}`,
       };
     } else {
       return {
         folder: "Hirix/Images",
         allowed_formats: ["jpeg", "jpg", "png", "svg"],
-        public_id: `${Date.now()}-${file.originalname.split(".")[0]}`,
+        public_id: `${Date.now()}-${file.originalname.split(".")[0]}.${extension}`,
       };
     }
   },
 });
+
 
 /* File filter (extra safety) */
 const fileFilter = (req, file, cb) => {
