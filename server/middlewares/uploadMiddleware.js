@@ -76,8 +76,6 @@
 // //   getCloudinaryFileUrl, // export helper along with upload
 // // };
 
-
-
 // const multer = require("multer");
 // const { CloudinaryStorage } = require("multer-storage-cloudinary");
 // const cloudinary = require("cloudinary").v2;
@@ -145,8 +143,6 @@
 
 // module.exports = { upload, getCloudinaryFileUrl };
 
-
-
 const multer = require("multer");
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const cloudinary = require("cloudinary").v2;
@@ -164,20 +160,13 @@ const storage = new CloudinaryStorage({
   params: async (req, file) => {
     const extension = file.originalname.split(".").pop();
 
-    if (file.mimetype === "application/pdf") {
-      return {
-        folder: "Hirix/Resumes",
-        resource_type: "raw", // important for PDFs
-        public_id: `${Date.now()}-${file.originalname.split(".")[0]}`,
-      };
-    } else {
-      return {
-        folder: "Hirix/Images",
-        resource_type: "image",
-        allowed_formats: ["jpeg", "jpg", "png", "svg"],
-        public_id: `${Date.now()}-${file.originalname.split(".")[0]}`,
-      };
-    }
+    const isPdf = file.mimetype === "application/pdf";
+    return {
+      folder: isPdf ? "Hirix/Resumes" : "Hirix/Images",
+      resource_type: isPdf ? "raw" : "image",
+      public_id: `${Date.now()}-${file.originalname.split(".")[0]}`,
+      format: extension, // <<< this is crucial
+    };
   },
 });
 
@@ -194,7 +183,10 @@ const fileFilter = (req, file, cb) => {
   if (allowedTypes.includes(file.mimetype)) {
     cb(null, true);
   } else {
-    cb(new Error("Invalid file type. Only JPEG, PNG, JPG, SVG, PDF allowed."), false);
+    cb(
+      new Error("Invalid file type. Only JPEG, PNG, JPG, SVG, PDF allowed."),
+      false
+    );
   }
 };
 
