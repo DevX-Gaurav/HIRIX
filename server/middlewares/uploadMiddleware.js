@@ -9,16 +9,36 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-/* Configure storage engine for multer */
+// /* Configure storage engine for multer */
+// const storage = new CloudinaryStorage({
+//   cloudinary: cloudinary,
+//   params: {
+//     folder: "Hirix" /* all images will be inside this folder on Cloudinary */,
+//     allowed_formats: ["jpeg", "jpg", "png", "pdf", "svg"],
+//     public_id: (req, file) =>
+//       `${Date.now()}-${file.originalname.split(".")[0]}` /* unique name */,
+//   },
+// });
+
 const storage = new CloudinaryStorage({
-  cloudinary: cloudinary,
-  params: {
-    folder: "Hirix" /* all images will be inside this folder on Cloudinary */,
-    allowed_formats: ["jpeg", "jpg", "png", "pdf", "svg"],
-    public_id: (req, file) =>
-      `${Date.now()}-${file.originalname.split(".")[0]}` /* unique name */,
+  cloudinary,
+  params: async (req, file) => {
+    if (file.mimetype === "application/pdf") {
+      return {
+        folder: "Hirix/Resumes",
+        resource_type: "raw", // important for PDFs
+        public_id: `${Date.now()}-${file.originalname.split(".")[0]}`,
+      };
+    } else {
+      return {
+        folder: "Hirix/Images",
+        allowed_formats: ["jpeg", "jpg", "png", "svg"],
+        public_id: `${Date.now()}-${file.originalname.split(".")[0]}`,
+      };
+    }
   },
 });
+
 /* File filter (extra safety) */
 const fileFilter = (req, file, cb) => {
   const allowedTypes = [
