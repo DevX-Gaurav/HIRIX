@@ -61,13 +61,25 @@ const deleteResume = async (req, res) => {
         .status(403)
         .json({ message: "Only jobseeker can delete resume" });
 
-    /* construct full file path */
-    const filePath = path.join(__dirname, "../uploads", fileName);
+    // /* construct full file path */
+    // const filePath = path.join(__dirname, "../uploads", fileName);
 
-    /* check if file exist and then delete */
-    if (fs.existsSync(filePath)) {
-      fs.unlinkSync(filePath);
-    }
+    // /* check if file exist and then delete */
+    // if (fs.existsSync(filePath)) {
+    //   fs.unlinkSync(filePath);
+    // }
+
+    // extract public_id from Cloudinary URL
+    const publicId = resumeUrl.split("/").pop().split(".")[0];
+
+    // delete from Cloudinary
+    await cloudinary.uploader.destroy(`Hirix/${publicId}`, {
+      resource_type: "raw",
+    }); // use raw for pdf/doc/docx
+
+    // clear from DB
+    user.resume = "";
+    await user.save();
 
     /* set the user resume to and empty string */
     user.resume = "";

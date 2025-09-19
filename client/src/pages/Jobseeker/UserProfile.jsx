@@ -114,6 +114,7 @@ const UserProfile = () => {
       name: user?.name || "",
       email: user?.email || "",
       avatar: user?.avatar || "",
+      resume: user?.resume || "",
     };
     setProfileData({ ...userData });
     setFormData({ ...userData });
@@ -191,7 +192,7 @@ const UserProfile = () => {
               </div>
 
               {/* userResume */}
-              {user?.resume ? (
+              {formData?.resume ? (
                 <div>
                   <label className="block mt-1 font-medium text-gray-700 mb-2">
                     Resume
@@ -200,16 +201,18 @@ const UserProfile = () => {
                     <p className="text-sm text-gray-600">
                       Link:{""}
                       <a
-                        href={user?.resume}
+                        href={formData?.resume}
                         target="_blank"
                         className="text-blue-500 underline cursor-pointer"
                       >
-                        {user?.resume}
+                        {formData?.resume}
                       </a>
                     </p>
                     <button className="cursor-pointer " onClick={DeleteResume}>
-                      <Trash2 className="w-5 h-5 text-red-500 
-                       " />
+                      <Trash2
+                        className="w-5 h-5 text-red-500 
+                       "
+                      />
                     </button>
                   </div>
                 </div>
