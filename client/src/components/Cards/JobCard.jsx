@@ -11,7 +11,7 @@ const JobCard = ({ job, onClick, onToggleSave, onApply, saved, hideApply }) => {
       if (num >= 1000) return `$${(num / 1000).toFixed(0)}K`;
       return `$${num}`;
     };
-    return `${formatNumber(min)}/PA`;
+    return `${formatNumber(min)}/year`;
   };
 
   return (
